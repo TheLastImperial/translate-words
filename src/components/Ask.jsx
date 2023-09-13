@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 
-export const ShowText = ({ word, from, to }) => {
+export const Ask = ({ word, from, to }) => {
   return (
     <div>
       <span>
@@ -12,7 +12,7 @@ export const ShowText = ({ word, from, to }) => {
   )
 }
 
-ShowText.propTypes = {
+Ask.propTypes = {
     word: PropTypes.string,
     from: PropTypes.string,
     to: PropTypes.string

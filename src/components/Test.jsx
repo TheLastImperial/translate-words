@@ -1,8 +1,8 @@
 import PropTypes from 'prop-types'
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
 import { selectOptions, selectWord } from '../helpers/selectors';
-import { ShowText } from './ShowText';
+import { Ask } from './Ask';
 import { Actions } from './Actions';
 import { Message } from './Message';
 
@@ -14,11 +14,12 @@ export const Test = ({ options, words }) => {
     const [inputValue, setInputValue] = useState("");
     const [msg, setMsg] = useState("");
     const [tries, setTries] = useState(0);
-  
+    const inputText = useRef()
+
     const setValues = () =>{
       const { from, to } = selectOptions(options);
       const { word, translated } = selectWord(words, options, from, to);
-    
+      inputText.current.focus()
       setFromWord(from);
       setToWord(to);
       setWord(word);
@@ -47,31 +48,40 @@ export const Test = ({ options, words }) => {
       setValues();
       setTries(0);
     }
+    
+    const handleKeyUp = (e) => {
+      if( e.key === "Enter")
+        validate();
+    }
 
     useEffect(() => {
-      setValues()
+      setValues();
     }, []);
     
     return (
         <>
-            <ShowText
+            <Ask
                 word = { word }
                 from = { fromWord }
                 to = { toWord }
             />
             <div>
                 <input type="text" 
-                value= { inputValue }
-                onChange={ (e) => setInputValue(e.target.value) } />
+                  ref = { inputText }
+                  autoFocus
+                  value = { inputValue }
+                  onChange = { (e) => setInputValue(e.target.value) }
+                  onKeyUp = { handleKeyUp }
+                />
             </div>
             <div className="card">
                 <button type="submit" onClick={() => validate() }>
-                Validar
+                  Validar
                 </button>
             </div>
             <Actions
                 tries = { tries }
-                showAfter={ 3 }
+                showAfter = { 3 }
                 next = { next }
                 show = { showAnswer }
             />
